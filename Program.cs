@@ -8,7 +8,7 @@ namespace LinqProject
 {
     public class PStudent
     {
-        #region 模块八-->数据类
+        #region  Linq入门-->模块八-->数据类
         public string First { get; set; }
         public string Last { get; set; }
         public int ID { get; set; }
@@ -39,21 +39,21 @@ namespace LinqProject
             //LINQ入门
             #region 模块一
             Console.WriteLine("*********************************************GameCC666-Linq学习**********************************************");
-            int[] numbers = new int[7] {1,2,3,4,5,6,7 };
+            int[] numbers = new int[7] { 1, 2, 3, 4, 5, 6, 7 };
 
             //直接将查询结果转换成List(),也可以将ToList()换为ToArray()
             List<int> numquerylist =
                 (from element in numbers
-                where (element % 2 == 0)
-                select element).ToList();
-            Console.WriteLine("直接转换成List<int>类型时候,获得的数据个数：{0}\n",numquerylist.Count);
+                 where (element % 2 == 0)
+                 select element).ToList();
+            Console.WriteLine("直接转换成List<int>类型时候,获得的数据个数：{0}\n", numquerylist.Count);
 
             var numquery =
                 from num in numbers
                 where (num % 2 == 0)
                 select num;
 
-            foreach(int num in numquery)
+            foreach (int num in numquery)
             {
                 Console.WriteLine("得到的值：{0}", num);
             }
@@ -98,11 +98,11 @@ namespace LinqProject
                 select student.Last)
                 .Concat(
                     from teacher in teachers
-                    where teacher.City=="Seattle"
+                    where teacher.City == "Seattle"
                     select teacher.Last
                 );
             Console.WriteLine("住在同一地区的老师和同学:::");
-            foreach(var persion in resquery)
+            foreach (var persion in resquery)
             {
                 Console.WriteLine(persion);
             }
@@ -119,24 +119,24 @@ namespace LinqProject
             };
             var _studentToXML = new XElement("Root",
                 from _student in _students
-                let _scores = string.Join(",",_student.Scores)
+                let _scores = string.Join(",", _student.Scores)
                 select new XElement("student",
-                    new XElement("First",_student.First),
+                    new XElement("First", _student.First),
                     new XElement("Last", _student.Last),
                     new XElement("_scores", _scores)
                     )
                 );
-            Console.WriteLine("生成的XML文件\n"+_studentToXML);
+            Console.WriteLine("生成的XML文件\n" + _studentToXML);
             #endregion
             #region 模块四
             Console.WriteLine("\n------------------------对源元素进行操作------------------------------\n");
             double[] radii = { 1, 2, 3 };
             IEnumerable<string> query =
                 from rad in radii
-                select $"Area={rad*rad*Math.PI:F2}";
-            foreach(string s in query)
+                select $"Area={rad * rad * Math.PI:F2}";
+            foreach (string s in query)
             {
-                Console.WriteLine("不同半径对应的面积是：{0}\n",s);
+                Console.WriteLine("不同半径对应的面积是：{0}\n", s);
             }
             #endregion
             #region 模块五
@@ -145,9 +145,9 @@ namespace LinqProject
             IEnumerable<string> _namequery = from name in _names
                                              where name[0] == 'M'
                                              select name;
-            foreach(string str in _namequery)
+            foreach (string str in _namequery)
             {
-                Console.WriteLine("输出源数据中符合条件的元素：{0}\n",str);
+                Console.WriteLine("输出源数据中符合条件的元素：{0}\n", str);
             }
             #endregion
             #region 模块六
@@ -197,7 +197,7 @@ namespace LinqProject
                 orderby num
                 select num;
             //Method syntax:
-            IEnumerable<int> _numQuery2 = _numbers.Where(num => num % 2 == 0).OrderBy(n => n);            
+            IEnumerable<int> _numQuery2 = _numbers.Where(num => num % 2 == 0).OrderBy(n => n);
             Console.WriteLine("基于查询语法的查询结果");
             foreach (int i in _numQuery1)
             {
@@ -220,11 +220,11 @@ namespace LinqProject
             Console.WriteLine("查询分数高于90的人:");
             foreach (PStudent student in _studentQuery)
             {
-                Console.WriteLine( "{0},{1}",student.Last,student.First );
+                Console.WriteLine("{0},{1}", student.Last, student.First);
             }
             IEnumerable<PStudent> _studentQuery2 =
                 from student in pstudents
-                where student.Scores[0] > 90 && student.Scores[3]<80
+                where student.Scores[0] > 90 && student.Scores[3] < 80
                 select student;
             Console.WriteLine("\n查询第一个分数大于90，最后一个小于80的人:");
             foreach (PStudent student in _studentQuery2)
@@ -248,17 +248,17 @@ namespace LinqProject
             Console.WriteLine("\n查询分数高于90的人并按照由高到低的顺序打印出来:");
             foreach (PStudent student in _studentQuery4)
             {
-                Console.WriteLine("{0},{1} ----> {2}", student.Last, student.First,student.Scores[0]);
+                Console.WriteLine("{0},{1} ----> {2}", student.Last, student.First, student.Scores[0]);
             }
             //对结果进行分组
             var _studentQuery5 =
                 from student in pstudents
                 group student by student.Last[0];
             Console.WriteLine("\n根据查询的结果的首字符作为相应的键来进行分类：");
-            foreach(var studentGroup in _studentQuery5)
+            foreach (var studentGroup in _studentQuery5)
             {
                 Console.WriteLine("Key=>{0}", studentGroup.Key);
-                foreach(PStudent student in studentGroup)
+                foreach (PStudent student in studentGroup)
                 {
                     Console.WriteLine("   data:{0}.{1}", student.Last, student.First);
                 }
@@ -282,9 +282,9 @@ namespace LinqProject
             foreach (var groupOfStudents in _studentQuery6)
             {
                 Console.WriteLine("Key=>{0}", groupOfStudents.Key);
-                foreach(var student in groupOfStudents)
+                foreach (var student in groupOfStudents)
                 {
-                    Console.WriteLine("    data:{0}.{1}",student.Last,student.First);
+                    Console.WriteLine("    data:{0}.{1}", student.Last, student.First);
                 }
             }
             //使用let引入标识符
@@ -296,11 +296,11 @@ namespace LinqProject
                from student in pstudents
                let totalScore = student.Scores[0] + student.Scores[1] + student.Scores[2] + student.Scores[3]
                where totalScore / 4 < student.Scores[0]
-               select "平均分："+totalScore/4+"|第一次成绩："+student.Scores[0]+"|学生姓名："+student.Last + "-" + student.First;
+               select "平均分：" + totalScore / 4 + "|第一次成绩：" + student.Scores[0] + "|学生姓名：" + student.Last + "-" + student.First;
             Console.WriteLine("\n使用let标识符选择平均分<第一次的成绩：");
-            foreach(string s in _studentQuery7)
+            foreach (string s in _studentQuery7)
             {
-                Console.WriteLine("     {0}",s);
+                Console.WriteLine("     {0}", s);
             }
             #endregion
 
@@ -318,10 +318,10 @@ namespace LinqProject
                 Select(g => new { Length = g.Key, Words = g }).
                 OrderBy(o => o.Length);
             Console.WriteLine("\n将英文句子拆成字符串数组然后使用linq进行查询;");
-            foreach(var obj in _query)
+            foreach (var obj in _query)
             {
-                Console.WriteLine("word of length {0}:",obj.Length);
-                foreach(string word in obj.Words)
+                Console.WriteLine("word of length {0}:", obj.Length);
+                foreach (string word in obj.Words)
                 {
                     Console.WriteLine("   {0}", word);
                 }
@@ -329,12 +329,15 @@ namespace LinqProject
             #endregion
 
             //LINQ to Objects
-            #region 模块一：对某个词在字符串中出现的次数进行计数
+            #region 模块一
             /*
-             * KeyNote：在对一句话使用-split-方法时存在性能开销，如果只是统计字符串的字数，可以考虑使用-Matches-,-IndexOf-方法
+             * KeyNote：
+             *        1：在对一句话使用-split-方法时存在性能开销，如果只是统计字符串的字数，可以考虑使用-Matches-,-IndexOf-方法
+             *        2：StringSplitOptions.RemoveEmptyEntries => 根据拆分之后的字符串数组，移除其中为空的元素
+             *        3：String.ToLowerInvariant()=> 返回时使用固定区域性的大小写规则,该固定区域性表示不区分区域性的区域性,它与英语语言关联，不与任何国家/地区关联。 详细信息请见：https://docs.microsoft.com/zh-cn/previous-versions/dotnet/netframework-4.0/4c5zdc6a(v=vs.100)
              */
-            Console.WriteLine("\n\n----------------------------LINQ to Objects-------------------------------\n");
-            string _text= @"Historically, the world of data and the world of objects" +
+            Console.WriteLine("\n\n-------------------对某个词在字符串中出现的次数进行计数----------------------");
+            string _text = @"Historically, the world of data and the world of objects" +
                           @" have not been well integrated. Programmers work in C# or Visual Basic" +
                           @" and also in SQL or XQuery. On the one side are concepts such as classes," +
                           @" objects, fields, inheritance, and .NET Framework APIs. On the other side" +
@@ -345,7 +348,7 @@ namespace LinqProject
                           @" IntelliSense support in the IDE. Transferring data from SQL tables or XML trees to" +
                           @" objects in memory is often tedious and error-prone.";
             string _searchTerem = "data";
-            Console.WriteLine("输出单词出现的次数");
+            Console.WriteLine("输出单词出现的次数：");
             string[] _source = _text.Split(new char[] { '.', '?', '!', ' ', ';', ':', ',' }, StringSplitOptions.RemoveEmptyEntries);
             var _matchQuery = from word in _source
                               where word.ToLowerInvariant() == _searchTerem.ToLowerInvariant()
@@ -353,8 +356,54 @@ namespace LinqProject
             int _wordCount = _matchQuery.Count();
             Console.WriteLine("单词‘data’出现的次数：{0};", _wordCount);
             #endregion
+            #region 模块二 
+            /*
+             * KeyNote：
+             *        1：String.Intersect(xxxx)=> 通过使用默认的相等比较器对值进行比较生成两个序列的交集
+             */
+            Console.WriteLine("\n\n-----------------------查询包含一组指定词语的句子----------------------------");
+            string[] _sentences = _text.Split(new char[] { '.', '?', '!' });
+            string[] _wordsToMatch = { "Historically", "data", "integrated" };
+            var _sentenceQuery = from sentence in _sentences
+                                 let w = sentence.Split(new char[] { '.', '?', '!', ' ', ';', ':', ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                 where w.Distinct().Intersect(_wordsToMatch).Count() == _wordsToMatch.Count()
+                                 select sentence;
+            Console.WriteLine("查询结果：");
+            foreach(string str in _sentenceQuery)
+            {
+                Console.WriteLine(str);
+            }
+            #endregion
+            #region 模块三 
+            /*
+             * KeyNote:
+             *       1：Char.IsDigit（）=>判断该字符是不是数字
+             *       2：String.TakeWhile(xxxx)=>TakeWhile()从集合的第一个元素开始，使用参数进行计算,如果返回true提取并继续判断下一个元素。如果返回false则停止判断，返回集合中被提取的元素。
+             */
+            Console.WriteLine("\n\n------------------------------查询字符串中的字符----------------------------n");
+            string _str = "ABCDE99F-J74-12-89A";
+            IEnumerable<char> _stringQuery =
+                from ch in _str
+                where Char.IsDigit(ch)
+                select ch;
+            Console.Write("字符串中包含的数字：");
+            foreach (char c in _stringQuery)
+                Console.Write(c+" ");
+            int _count = _stringQuery.Count();
+            Console.WriteLine("\n总共出现的次数：{0};",_count);
+            Console.Write("满足条件的字符串序列为(截取到第一个‘—’位置的字符串)：");
+            IEnumerable<char> _stringQuery2 = _str.TakeWhile(c => c != '-');
+            foreach (char c in _stringQuery2)
+                Console.Write(c+" ");
+            #endregion
+            #region 模块四
+            /*
+             * KeyNote:
+             */
+            Console.WriteLine("\n\n----------------------------将Linq查询与正则表达式合并-----------------------n");
+            string _startFolder = @"C:\Program Files (x86)\Microsoft Visual Studio 14.0\";
 
-
+            #endregion
 
 
 
@@ -362,5 +411,23 @@ namespace LinqProject
             Console.WriteLine("\n\n*********************************gamecc666测试完毕！！！***************************************");
             Console.ReadKey();
         }
+
+        #region Linq To Object-->模块四
+        static IEnumerable<System.IO.FileInfo> GetFiles(string path)
+        {
+            if(!System.IO.Directory.Exists(path))
+            {
+                throw new System.IO.DirectoryNotFoundException();
+            }
+            string[] fileNames = null;
+            List<System.IO.FileInfo> _files = new List<System.IO.FileInfo>();
+            fileNames = System.IO.Directory.GetFiles(path, "*.*", System.IO.SearchOption.AllDirectories);
+            foreach(string name in fileNames)
+            {
+                _files.Add(new System.IO.FileInfo(name));
+            }
+            return _files;
+        }
+        #endregion
     }
 }

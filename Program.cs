@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 //全程MSDN：https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/concepts/linq/walkthrough-writing-queries-linq
@@ -396,13 +398,36 @@ namespace LinqProject
             foreach (char c in _stringQuery2)
                 Console.Write(c+" ");
             #endregion
-            #region 模块四
+            #region 模块四 
             /*
              * KeyNote:
+             *       1：Regex=>参考web：https://docs.microsoft.com/zh-cn/dotnet/api/system.text.regularexpressions.regex.-ctor?view=netframework-4.8
              */
             Console.WriteLine("\n\n----------------------------将Linq查询与正则表达式合并-----------------------n");
             string _startFolder = @"C:\Program Files (x86)\Microsoft Visual Studio 14.0\";
-
+            IEnumerable<FileInfo> fileList = GetFiles(_startFolder);
+            Regex seaarchTern = new Regex(@"Visual (Basic|C#|C\+\+|Studio)");
+            var queryMatchingFiles =
+                from file in fileList
+                where file.Extension == ".html"
+                let fileText = File.ReadAllText(file.FullName)
+                let matches = seaarchTern.Matches(fileText)
+                select new
+                {
+                    name = file.FullName,
+                    matchedValues = from Match match in matches
+                                    select match.Value
+                };
+            Console.WriteLine("The term \"{0}\" was found in ;", seaarchTern.ToString());
+            foreach(var v in queryMatchingFiles)
+            {
+                string s = v.name.Substring(_startFolder.Length - 1);
+                Console.WriteLine(s);
+                foreach(var v2 in v.matchedValues)
+                {
+                    Console.WriteLine("  " + v2);
+                }
+            }
             #endregion
 
 
@@ -413,18 +438,18 @@ namespace LinqProject
         }
 
         #region Linq To Object-->模块四
-        static IEnumerable<System.IO.FileInfo> GetFiles(string path)
+        static IEnumerable<FileInfo> GetFiles(string path)
         {
-            if(!System.IO.Directory.Exists(path))
+            if(!Directory.Exists(path))
             {
-                throw new System.IO.DirectoryNotFoundException();
+                throw new DirectoryNotFoundException();
             }
             string[] fileNames = null;
-            List<System.IO.FileInfo> _files = new List<System.IO.FileInfo>();
-            fileNames = System.IO.Directory.GetFiles(path, "*.*", System.IO.SearchOption.AllDirectories);
+            List<FileInfo> _files = new List<FileInfo>();
+            fileNames = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
             foreach(string name in fileNames)
             {
-                _files.Add(new System.IO.FileInfo(name));
+                _files.Add(new FileInfo(name));
             }
             return _files;
         }

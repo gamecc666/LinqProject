@@ -439,10 +439,14 @@ namespace LinqProject
              *       2:
              */
             Console.WriteLine("\n\n----------------------------查找两个列表之间的差集-----------------------n");
-
-
-
-
+            string[] names1 = File.ReadAllLines(@"../Resources/names1.txt");
+            string[] names2 = File.ReadAllLines(@"../Resources/names2.txt");
+            IEnumerable<string> differenceQuery = names1.Except(names2);
+            Console.WriteLine("(取差集)The following lines are in names1.txt but not names2.txt");
+            foreach(string s in differenceQuery)
+            {
+                Console.WriteLine(s);
+            }
             #endregion
             #region 模块六
             /*

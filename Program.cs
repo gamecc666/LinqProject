@@ -432,6 +432,72 @@ namespace LinqProject
                 }
             }
             #endregion
+            #region 模块五
+            /*
+             * KeyNote:
+             *       1:
+             *       2:
+             */
+            Console.WriteLine("\n\n----------------------------查找两个列表之间的差集-----------------------n");
+            #endregion
+            #region 模块六
+            /*
+             * KeyNote:
+             *       1:
+             *       2:
+             */
+            Console.WriteLine("\n\n---------------------按任意词或字段对文本数据进行排序或筛选---------------n");
+            #endregion
+            #region 模块七
+            /*
+             * KeyNote:
+             *       1:
+             *       2:
+             */
+            Console.WriteLine("\n\n-------------------------重新排列带分隔符的文件的字段---------------------n");
+            #endregion
+            #region 模块八
+            /*
+             * KeyNote:
+             *       1:
+             *       2:
+             */
+            Console.WriteLine("\n\n---------------------------组合和比较字符串集合---------------------------n");
+            #endregion
+            #region 模块九
+            /*
+             * KeyNote:
+             *       1:
+             *       2:
+             */
+            Console.WriteLine("\n\n--------------------------从多个数据源填充对象集合-------------------------n");
+            #endregion
+            #region 模块十
+            /*
+             * KeyNote:
+             *       1:
+             *       2:
+             */
+            Console.WriteLine("\n\n-----------------------使用组将一个文件拆分成多个文件----------------------n");
+            #endregion
+            #region 模块十一
+            /*
+             * KeyNote:
+             *       1:
+             *       2:
+             */
+            Console.WriteLine("\n\n--------------------------联接不同文件中的内容-----------------------------n");
+            #endregion
+            #region 模块十二
+            /*
+             * KeyNote:
+             *       1:
+             *       2:
+             */
+            Console.WriteLine("\n\n--------------------------在CSV文本文件中计算列值--------------------------n");
+            #endregion
+
+
 
 
 

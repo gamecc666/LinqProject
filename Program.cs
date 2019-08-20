@@ -439,6 +439,16 @@ namespace LinqProject
              *       2:
              */
             Console.WriteLine("\n\n----------------------------查找两个列表之间的差集-----------------------n");
+            string[] names1 = File.ReadAllLines(@"../依赖文件/names1.txt");
+            string[] names2 = File.ReadAllLines(@"../依赖文件/names2.txt");
+            IEnumerable<string> differenceQuery = names1.Except(names2);
+            Console.WriteLine("(取差集)The following lines are in names1.txt but not names2.txt");
+            foreach(string s in differenceQuery)
+            {
+                Console.WriteLine(s);
+            }
+
+
             #endregion
             #region 模块六
             /*
@@ -459,10 +469,38 @@ namespace LinqProject
             #region 模块八
             /*
              * KeyNote:
-             *       1:
-             *       2:
+             *       1:IEnumerable.Concat/Union/Intersect => 见网址：https://docs.microsoft.com/zh-cn/dotnet/api/system.linq.enumerable.intersect?view=netframework-4.8 
              */
             Console.WriteLine("\n\n---------------------------组合和比较字符串集合---------------------------n");
+            string[] fileA = File.ReadAllLines(@"../依赖文件/names1.txt");
+            string[] fileB = File.ReadAllLines(@"../依赖文件/names2.txt");
+            IEnumerable<string> concatQuery =
+                fileA.Concat(fileB).OrderBy(s => s);
+            OutputQueryResults(concatQuery, "(文本链接并排序)Simple concatenate and sort. Duplicates are preserved:");
+            IEnumerable<string> uniqueNamesQuery =
+                fileA.Union(fileB).OrderBy(s => s);
+            OutputQueryResults(uniqueNamesQuery, "（取并集）Union removes duplicate names:");
+            IEnumerable<string> commonNamesQuery =
+                fileA.Intersect(fileB);
+            OutputQueryResults(commonNamesQuery, "（取交集）Merge based on intersect:");
+            string nameMatch = "Garcia";
+
+            IEnumerable<String> tempQuery1 =
+                from name in fileA
+                let n = name.Split(',')
+                where n[0] == nameMatch
+                select name;
+
+            IEnumerable<string> tempQuery2 =
+                from name2 in fileB
+                let n2 = name2.Split(',')
+                where n2[0] == nameMatch
+                select name2;
+
+            IEnumerable<string> nameMatchQuery =
+                tempQuery1.Concat(tempQuery2).OrderBy(s => s);
+            OutputQueryResults(nameMatchQuery, $"（取名字中第一个单词相同为 Garcia）Concat based on partial name match \"{nameMatch}\":");
+
             #endregion
             #region 模块九
             /*
@@ -529,5 +567,20 @@ namespace LinqProject
             return _files;
         }
         #endregion
-    } 
+        #region Linq To Objects-->模块八
+        /*
+         * KeyNote：
+         *       1：  Environment.NewLine => 是专门为当前平台和实现 .NET Framework 而自定义的常量;
+         */
+        static void OutputQueryResults(IEnumerable<string> query, string message)
+        {
+            Console.WriteLine(Environment.NewLine + message);
+            foreach (string item in query)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine("{0} total names in list", query.Count());
+        }
+        #endregion
+    }
 }

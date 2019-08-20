@@ -401,7 +401,10 @@ namespace LinqProject
             #region 模块四 
             /*
              * KeyNote:
-             *       1：Regex=>参考web：https://docs.microsoft.com/zh-cn/dotnet/api/system.text.regularexpressions.regex.-ctor?view=netframework-4.8
+             *       1：Regex => 参考web：https://docs.microsoft.com/zh-cn/dotnet/api/system.text.regularexpressions.regex.-ctor?view=netframework-4.8
+             *       2：Match => 参考web：https://docs.microsoft.com/zh-cn/dotnet/api/system.text.regularexpressions.match?view=netframework-4.8
+             *       3：Directory.GetFiles => 参考web：https://docs.microsoft.com/zh-cn/dotnet/api/system.io.directory.getfiles?view=netframework-4.8
+             *       4：正则表达式英语 => regular expression
              */
             Console.WriteLine("\n\n----------------------------将Linq查询与正则表达式合并-----------------------n");
             string _startFolder = @"C:\Program Files (x86)\Microsoft Visual Studio 14.0\";
@@ -425,7 +428,7 @@ namespace LinqProject
                 Console.WriteLine(s);
                 foreach(var v2 in v.matchedValues)
                 {
-                    Console.WriteLine("  " + v2);
+                    Console.WriteLine("-||-" + v2);
                 }
             }
             #endregion
@@ -437,7 +440,13 @@ namespace LinqProject
             Console.ReadKey();
         }
 
-        #region Linq To Object-->模块四
+
+
+
+
+
+        //模块调用方法
+        #region Linq To Object-->模块四       
         static IEnumerable<FileInfo> GetFiles(string path)
         {
             if(!Directory.Exists(path))
@@ -454,5 +463,5 @@ namespace LinqProject
             return _files;
         }
         #endregion
-    }
+    } 
 }

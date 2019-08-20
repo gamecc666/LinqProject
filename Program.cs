@@ -439,10 +439,6 @@ namespace LinqProject
              *       2:
              */
             Console.WriteLine("\n\n----------------------------查找两个列表之间的差集-----------------------n");
-
-
-
-
             #endregion
             #region 模块六
             /*
@@ -471,41 +467,17 @@ namespace LinqProject
             #region 模块九
             /*
              * KeyNote:
-             *       1:IEnumerable.Concat/Union/Intersect => 详解见网址：https://docs.microsoft.com/zh-cn/dotnet/api/system.linq.enumerable.intersect?view=netframework-4.8
+             *       1:
+             *       2:
              */
             Console.WriteLine("\n\n--------------------------从多个数据源填充对象集合-------------------------n");
-            string[] fileA = File.ReadAllLines(@"../Resources/names1.txt");
-            string[] fileB = File.ReadAllLines(@"../Resources/names2.txt");
-            IEnumerable<string> concatQuery =
-                fileA.Concat(fileB).OrderBy(s => s);           
-            OutputQueryResults(concatQuery, "(简单的连接与排序)Simple concatenate and sort. Duplicates are preserved:");
-            IEnumerable<string> uniqueNamesQuery =
-                fileA.Union(fileB).OrderBy(s => s);
-            OutputQueryResults(uniqueNamesQuery, "(取并集)Union removes duplicate names: ");
-            IEnumerable<string> commonnamesQuery = fileA.Intersect(fileB);
-            OutputQueryResults(commonnamesQuery, "(取交集)Merge based on intersect;");
-            string nameMatch = "Garcia";
-            IEnumerable<string> tempQuery1 =
-                from name in fileA
-                let n = name.Split(',')
-                where n[0] == nameMatch
-                select name;
-            IEnumerable<string> tempQuery2 =
-                from name2 in fileB
-                let n2 = name2.Split(',')
-                where n2[0] == nameMatch
-                select name2;
-            IEnumerable<string> nameMatchQuery = tempQuery1.Concat(tempQuery2).OrderBy(s => s);
-            OutputQueryResults(nameMatchQuery, $"Concat based on partial name match \"{nameMatch}\":");
-
-
             #endregion
             #region 模块十
             /*
-                * KeyNote:
-                *       1:
-                *       2:
-                */
+             * KeyNote:
+             *       1:
+             *       2:
+             */
             Console.WriteLine("\n\n-----------------------使用组将一个文件拆分成多个文件----------------------n");
             #endregion
             #region 模块十一
@@ -557,20 +529,5 @@ namespace LinqProject
             return _files;
         }
         #endregion
-        #region LINQ to Objects-->模块九
-        /*
-         * KeyNote：
-         *       1：Environment.NewLine：是专门为当前平台和实现 .NET Framework 而自定义的常量 《=》换行符         
-         */
-        static void OutputQueryResults(IEnumerable<string> query,string message)
-        {
-            Console.WriteLine(Environment.NewLine + message);            
-            foreach (var item in query)
-            {
-                Console.WriteLine(item);
-            }
-            Console.WriteLine("{0} total names in list", query.Count());
-        }
-        #endregion
-    }
+    } 
 }

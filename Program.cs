@@ -456,13 +456,17 @@ namespace LinqProject
              */
             Console.WriteLine("\n\n---------------------按任意词或字段对文本数据进行排序或筛选---------------n");
             #endregion
-            #region 模块七
-            /*
-             * KeyNote:
-             *       1:
-             *       2:
-             */
+            #region 模块七       
             Console.WriteLine("\n\n-------------------------重新排列带分隔符的文件的字段---------------------n");
+            string[] lines = File.ReadAllLines(@"../依赖文件/spreadsheet1.csv");
+            IEnumerable<string> queryres =
+                from line in lines
+                let x = line.Split(',')
+                orderby x[2]
+                select x[2] + "," + (x[1] + " " + x[0]);
+            File.WriteAllLines(@"../依赖文件/spreadsheet2.csv",queryres.ToArray());
+            Console.WriteLine("请前往bin/debug 文件夹下查看生成文件！");
+
             #endregion
             #region 模块八
             /*

@@ -455,6 +455,13 @@ namespace LinqProject
              *       2:
              */
             Console.WriteLine("\n\n---------------------按任意词或字段对文本数据进行排序或筛选---------------n");
+            string[] _scoress = File.ReadAllLines(@"../依赖文件/scores.csv");
+            int sortField = 1;
+            Console.WriteLine("Sorted heighest to lowest by field[{0}]：",sortField);
+            foreach(string str in RunQuery(_scoress,sortField))
+            {
+                Console.WriteLine(str);
+            }
             #endregion
             #region 模块七       
             Console.WriteLine("\n\n-------------------------重新排列带分隔符的文件的字段---------------------n");
@@ -527,6 +534,20 @@ namespace LinqProject
              *       2:
              */
             Console.WriteLine("\n\n--------------------------联接不同文件中的内容-----------------------------n");
+            string[] names = File.ReadAllLines(@"../依赖文件/names.csv");
+            string[] scores = File.ReadAllLines(@"../依赖文件/scores.csv");
+            IEnumerable<string> scoreQuery1 =
+                from name in names
+                let nameFileds = name.Split(',')
+                from id in scores
+                let scoreFileds = id.Split(',')
+                where Convert.ToInt32(nameFileds[2]) == Convert.ToInt32(scoreFileds[0])
+                select nameFileds[0] + "," + scoreFileds[1] + "," + scoreFileds[2] + "," + scoreFileds[3] + "," + scoreFileds[4];
+
+            OutputQueryResults(scoreQuery1, "Merge two spreadsheets：");
+
+
+
             #endregion
             #region 模块十二
             /*
@@ -545,6 +566,8 @@ namespace LinqProject
             Console.WriteLine("\n\n*********************************gamecc666测试完毕！！！***************************************");
             Console.ReadKey();
         }
+
+       
 
 
 
@@ -569,7 +592,16 @@ namespace LinqProject
             return _files;
         }
         #endregion
-        #region Linq To Objects-->模块八
+        #region Linq To Objects-->模块八&模块六
+        static IEnumerable<string> RunQuery(IEnumerable<string> source,int num)
+        {
+            var scoreQuery = from line in source
+                             let fields = line.Split(",")
+                             orderby fields[num] descending
+                             select line;
+            return scoreQuery;
+        }
+
         /*
          * KeyNote：
          *       1：  Environment.NewLine => 是专门为当前平台和实现 .NET Framework 而自定义的常量;

@@ -371,7 +371,7 @@ namespace LinqProject
                                  where w.Distinct().Intersect(_wordsToMatch).Count() == _wordsToMatch.Count()
                                  select sentence;
             Console.WriteLine("查询结果：");
-            foreach(string str in _sentenceQuery)
+            foreach (string str in _sentenceQuery)
             {
                 Console.WriteLine(str);
             }
@@ -390,13 +390,13 @@ namespace LinqProject
                 select ch;
             Console.Write("字符串中包含的数字：");
             foreach (char c in _stringQuery)
-                Console.Write(c+" ");
+                Console.Write(c + " ");
             int _count = _stringQuery.Count();
-            Console.WriteLine("\n总共出现的次数：{0};",_count);
+            Console.WriteLine("\n总共出现的次数：{0};", _count);
             Console.Write("满足条件的字符串序列为(截取到第一个‘—’位置的字符串)：");
             IEnumerable<char> _stringQuery2 = _str.TakeWhile(c => c != '-');
             foreach (char c in _stringQuery2)
-                Console.Write(c+" ");
+                Console.Write(c + " ");
             #endregion
             #region 模块四 
             /*
@@ -422,11 +422,11 @@ namespace LinqProject
                                     select match.Value
                 };
             Console.WriteLine("The term \"{0}\" was found in ;", seaarchTern.ToString());
-            foreach(var v in queryMatchingFiles)
+            foreach (var v in queryMatchingFiles)
             {
                 string s = v.name.Substring(_startFolder.Length - 1);
                 Console.WriteLine(s);
-                foreach(var v2 in v.matchedValues)
+                foreach (var v2 in v.matchedValues)
                 {
                     Console.WriteLine("-||-" + v2);
                 }
@@ -443,7 +443,7 @@ namespace LinqProject
             string[] names2 = File.ReadAllLines(@"../依赖文件/names2.txt");
             IEnumerable<string> differenceQuery = names1.Except(names2);
             Console.WriteLine("(取差集)The following lines are in names1.txt but not names2.txt");
-            foreach(string s in differenceQuery)
+            foreach (string s in differenceQuery)
             {
                 Console.WriteLine(s);
             }
@@ -457,8 +457,8 @@ namespace LinqProject
             Console.WriteLine("\n\n---------------------按任意词或字段对文本数据进行排序或筛选---------------n");
             string[] _scoress = File.ReadAllLines(@"../依赖文件/scores.csv");
             int sortField = 1;
-            Console.WriteLine("Sorted heighest to lowest by field[{0}]：",sortField);
-            foreach(string str in RunQuery(_scoress,sortField))
+            Console.WriteLine("Sorted heighest to lowest by field[{0}]：", sortField);
+            foreach (string str in RunQuery(_scoress, sortField))
             {
                 Console.WriteLine(str);
             }
@@ -471,7 +471,7 @@ namespace LinqProject
                 let x = line.Split(',')
                 orderby x[2]
                 select x[2] + "," + (x[1] + " " + x[0]);
-            File.WriteAllLines(@"../依赖文件/spreadsheet2.csv",queryres.ToArray());
+            File.WriteAllLines(@"../依赖文件/spreadsheet2.csv", queryres.ToArray());
             Console.WriteLine("请前往bin/debug 文件夹下查看生成文件！");
 
             #endregion
@@ -514,18 +514,63 @@ namespace LinqProject
             #region 模块九
             /*
              * KeyNote:
-             *       1:
+             *       1:String.Skip(1)=>表示从索引为1的位置开始截取；扩展String.Skip(4)=>表示截取到索引为4的位置
              *       2:
              */
             Console.WriteLine("\n\n--------------------------从多个数据源填充对象集合-------------------------n");
+            string[] linqtoobjets_names = File.ReadAllLines(@"../依赖文件/names.csv");
+            string[] linqtoobjets_scores = File.ReadAllLines(@"../依赖文件/scores.csv");
+            IEnumerable<LinqProject.模块九.Student> querynamesScores =
+                from nameLine in linqtoobjets_names
+                let splitName = nameLine.Split(',')
+                from scoreLine in linqtoobjets_scores
+                let splitScoreLine = scoreLine.Split(',')
+                where Convert.ToInt32(splitName[2]) == Convert.ToInt32(splitScoreLine[0])
+                select new LinqProject.模块九.Student()
+                {
+                    FirstName = splitName[0],
+                    LastName = splitName[1],
+                    ID = Convert.ToInt32(splitName[2]),
+                    ExamScores = (from scoreAsText in splitScoreLine.Skip(1)
+                                  select Convert.ToInt32(scoreAsText)).ToList()                                
+                };
+            List<LinqProject.模块九.Student> linqtoobjets_strdents = querynamesScores.ToList();
+            foreach(var student in linqtoobjets_strdents)
+            {
+                Console.WriteLine("The average score of {0} {1} is {2}", student.FirstName,student.LastName,student.ExamScores.Average());                 
+            }
             #endregion
             #region 模块十
             /*
              * KeyNote:
-             *       1:
-             *       2:
+             *       1:Union => 两个融合成一个一样的只取其中一个
+             *       2:into => 相当于将查询结果起一个临时名字
              */
             Console.WriteLine("\n\n-----------------------使用组将一个文件拆分成多个文件----------------------n");
+            Console.WriteLine("---实现目标：合并两个文件的内容，然后创建一组以新方式整理数据的新文件---");
+            string[] linqtoobjets_fileA = File.ReadAllLines(@"../依赖文件/names1.txt");
+            string[] linqtoobjets_fileB = File.ReadAllLines(@"../依赖文件/names2.txt");
+            var mergequery = linqtoobjets_fileA.Union(linqtoobjets_fileB);
+            var groupquery = from name in mergequery
+                             let n = name.Split(',')
+                             group name by n[0][0] into g
+                             orderby g.Key
+                             select g;
+            foreach(var g in groupquery)
+            {
+                string filename = @"../动态生成文件/testFile_"+g.Key+".txt";
+                Console.WriteLine(g.Key);
+                using (StreamWriter sw = new StreamWriter(filename))
+                {
+                    foreach(var item in g)
+                    {
+                        sw.WriteLine(item);
+                        Console.WriteLine("    {0}", item);
+                    }
+                }
+            }
+
+
             #endregion
             #region 模块十一
             /*
@@ -545,9 +590,6 @@ namespace LinqProject
                 select nameFileds[0] + "," + scoreFileds[1] + "," + scoreFileds[2] + "," + scoreFileds[3] + "," + scoreFileds[4];
 
             OutputQueryResults(scoreQuery1, "Merge two spreadsheets：");
-
-
-
             #endregion
             #region 模块十二
             /*
@@ -556,6 +598,11 @@ namespace LinqProject
              *       2:
              */
             Console.WriteLine("\n\n--------------------------在CSV文本文件中计算列值--------------------------n");
+            string[] linqtoobjectslines = File.ReadAllLines(@"../依赖文件/scores.csv");
+            int exam = 3;
+            SingleColumn(linqtoobjectslines, exam + 1);
+            Console.WriteLine();
+            MultiColumns(linqtoobjectslines);
             #endregion
 
 
@@ -614,6 +661,47 @@ namespace LinqProject
                 Console.WriteLine(item);
             }
             Console.WriteLine("{0} total names in list", query.Count());
+        }
+        #endregion
+        #region Linq To Object-->模块十二
+        /*
+        * KeyNote：
+        *       1：  ElementAt(index) => 返回集合中指定索引的元素；与ElementAtDefault(index)用法一样；区别在于：前者如果没有查询到结果的话会抛出异常，后者没有查询到结果的话会返回默认值
+        */
+        static void SingleColumn(IEnumerable<string> strs,int examNum)
+        {
+            Console.WriteLine("Single Column Query:");
+            var columnQuery =
+                from line in strs
+                let elements = line.Split(',')
+                select Convert.ToInt32(elements[examNum]);
+            var results = columnQuery.ToList();
+            double average = results.Average();
+            int max = results.Max();
+            int min = results.Min();
+            Console.WriteLine("Exam #{0}:Average：{1:##.##} High Score:{2} Low Score:{3}", examNum, average, max, min);
+        }
+        static void  MultiColumns(IEnumerable<string> strs)
+        {
+            Console.WriteLine("Mulit Column Query:");
+            IEnumerable<IEnumerable<int>> mulitColQuery =
+                from line in strs
+                let elements = line.Split(',')
+                let scores = elements.Skip(1)
+                select (from str in scores
+                        select Convert.ToInt32(str)
+                       );
+            var results = mulitColQuery.ToList();
+            int columnCount = results[0].Count();
+            for(int column=0;column<columnCount;column++)
+            {
+                var results2 = from row in results
+                               select row.ElementAt(column);
+                double average = results2.Average();
+                int max = results2.Max();
+                int min = results2.Min();
+                Console.WriteLine("Exam #{0} Average: {1:##.##} High Score:{2} Low Score:{3}", column + 1, average, max, min);
+            }
         }
         #endregion
     }

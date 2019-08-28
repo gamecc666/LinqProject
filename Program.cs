@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
@@ -330,7 +331,7 @@ namespace LinqProject
             }
             #endregion
 
-            //LINQ to Objects
+            //LINQ to Objects => 操作指南
             #region 模块一
             /*
              * KeyNote：
@@ -604,6 +605,76 @@ namespace LinqProject
             Console.WriteLine();
             MultiColumns(linqtoobjectslines);
             #endregion
+
+            //LINQ to Objects => Linq 和反射
+            #region 模块一
+            Console.WriteLine("\n\n-------------------------使用反射查询程序集的元数据--------------------------n");
+            Assembly assembly = Assembly.Load("System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken= b77a5c561934e089");
+            var pubTypesQuery = from type in assembly.GetTypes()
+                                where type.IsPublic
+                                from method in type.GetMethods()
+                                where method.ReturnType.IsArray == true || (method.ReturnType.GetInterface(typeof(IEnumerable<>).FullName) != null && method.ReturnType.FullName != "System.String")
+                                group method.ToString() by type.ToString();
+            foreach(var groupOfMethods in pubTypesQuery)
+            {
+                Console.WriteLine("Type:{0}", groupOfMethods.Key);
+                foreach(var method in groupOfMethods)
+                {
+                    Console.WriteLine("  {0}", method);
+                }
+            }
+            #endregion
+
+            //LINQ to XML
+            #region 模块一：函数构造
+            Console.WriteLine("\n\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-LINQ to XML-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+            /*
+             * KeyNote:
+             *       1：(int)XElement => 将对应的XElement值转换成整形数据；如果只是XElement的话就输出的是XML文档
+             *       2:
+             */
+            Console.WriteLine("Title----------------函数构造--------------");
+            XElement contacts =
+                new XElement("Contacts",
+                    new XElement("Contact",
+                        new XElement("Name","Patrick Hines"),
+                        new XElement("Phone","206-555-0144"),
+                        new XElement("Address",
+                            new XElement("Streer1","123 Main St"),
+                            new XElement("City", "Mercer Island"),
+                            new XElement("State", "WA"),
+                            new XElement("Postal", "68042")
+                        )
+                    )
+                );
+            Console.WriteLine("方案一输出结果：\n"+contacts);
+            XElement srcTree = new XElement("Root",
+                new XElement("Element", 1),
+                new XElement("Element", 2),
+                new XElement("Element", 3),
+                new XElement("Element", 4),
+                new XElement("Element", 5)
+            );
+            XElement xmlTree = new XElement("Root",
+                new XElement("Child", 1),
+                new XElement("Child", 2),
+                from  el in srcTree.Elements()
+                where (int)el>3
+                select el
+            );
+            Console.WriteLine("方案二输出结果：\n"+xmlTree);
+            #endregion
+            #region 模块二：在C#中创建XML
+            /*
+             * KeyNote:
+             *       1：(int)XElement => 将对应的XElement值转换成整形数据；如果只是XElement的话就输出的是XML文档
+             *       2:
+             */
+            Console.WriteLine("Title----------------在C#中创建XML--------------");
+
+
+            #endregion
+
 
 
 

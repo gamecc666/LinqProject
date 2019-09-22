@@ -668,9 +668,25 @@ namespace LinqProject
             /*
              * KeyNote:
              *       1：(int)XElement => 将对应的XElement值转换成整形数据；如果只是XElement的话就输出的是XML文档
-             *       2:
+             *       2：public XElement(XName name, params object[] content)这个是参数数组在C#中的用法必须有关键字 'params'，调用的时候可以传任意个参数
              */
             Console.WriteLine("Title----------------在C#中创建XML--------------");
+            XElement ltx_xmlTree1 = new XElement("Root",
+                new XElement("Child1", 1)
+                );
+
+            XElement ltx_child2 = new XElement("Child2", 2);
+
+            XElement ltx_xmlTree2 = new XElement("Root",
+                ltx_xmlTree1.Element("Child1"), ltx_child2
+                );
+            Console.WriteLine("ltx_xmlTree1 is \n{0}\n--------\n", ltx_xmlTree1);
+            Console.WriteLine("ltx_child2 is \n{0} \n--------\n", ltx_child2);
+            Console.WriteLine("ltx_xmlTree2 is \n{0} \n--------\n", ltx_xmlTree2);
+
+            Console.WriteLine("Child1 was {0}", ltx_xmlTree1.Element("Child1") == ltx_xmlTree2.Element("Child1") ? "attached" : "cloned");
+
+            Console.WriteLine("Child2 was {0}", ltx_child2 == ltx_xmlTree2.Element("Child2") ? "attached" : "cloned");
 
 
             #endregion
